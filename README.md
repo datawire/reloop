@@ -28,19 +28,19 @@ version: "2"
 services:
   web:
     # Use the special reloop image:
-      image: "datawire/reloopd"
+    image: "datawire/reloopd"
     ports:
       - "5000:5000"
     volumes:
-      # Mount the repository as /code, read-only
+      # Mount the repository as /hello, read-only
       - ".:/code:ro"
     environment:
       # The file or directory to watch for updates:
-      RELOOP_WATCH: "/code/hello.py"
+      RELOOP_WATCH: "/code"
       # Run once as setup:
       RELOOP_BEFORE_CMD: "pip install -r /code/requirements.txt"
       # Run every time the watched files change:
-      RELOOP_CMD: "python /code/hello.py"
+      RELOOP_CMD: "python /code/hello/hello.py"
     depends_on:
       - mydatabase
   mydatabase:
