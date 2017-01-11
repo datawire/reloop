@@ -10,7 +10,7 @@ all: clean build
 build:
 	tox -e py34
 
-docker-build:
+docker-build: all
 	docker build -t $(DOCKER_REPO):$(VERSION) .
 
 docker-sh:
