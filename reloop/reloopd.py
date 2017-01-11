@@ -2,12 +2,11 @@
 import click
 import os
 
-from pathlib import Path
 from twisted.internet import inotify, reactor
 from twisted.python import filepath
 from . import __version__
 
-watch = Path(os.getenv('RELOOP_WATCH', '.'))
+watch = os.getenv('RELOOP_WATCH', '.')
 before_command = os.getenv('RELOOP_BEFORE_CMD', '[ ]')
 command = os.getenv('RELOOP_CMD')
 
@@ -43,12 +42,12 @@ def run():
         click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
-    click.echo('reloopd run {0} {1})'.format(('directory' if watch.is_dir() else 'file'),
-                                             watch.absolute()))
+    click.echo('reloopd run {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
+                                             os.path.abspath(watch)))
     notifier = inotify.INotify()
     notifier.startReading()
     # recursive=True causes this whole thing to barely work... no FS changes will be detected.
-    notifier.watch(filepath.FilePath(str(watch.absolute())), autoAdd=True, callbacks=[on_change])
+    notifier.watch(filepath.FilePath(str(s.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
     reactor.run()
 
 if __name__ == '__main__':

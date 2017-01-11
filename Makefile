@@ -8,7 +8,7 @@ VERSION=$(shell git rev-parse --short=8 HEAD)
 all: clean build
 
 build:
-	tox -e py35
+	tox -e py27
 	# Make sure resulting pex file works:
 	dist/reloopd --help
 
