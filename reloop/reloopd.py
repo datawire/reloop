@@ -1,6 +1,9 @@
 #!/usr/bin/env python
-import click
 import os
+# Pacify Click:
+if os.environ.get("LANG", None) is None:
+    os.environ["LANG"] = os.environ["LC_ALL"] = "C.UTF-8"
+import click
 
 from pathlib import Path
 from twisted.internet import inotify, reactor
