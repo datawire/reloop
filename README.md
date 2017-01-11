@@ -1,4 +1,5 @@
 # Reloop
+[![Build Status](https://travis-ci.org/datawire/reloop.svg?branch=master)](https://travis-ci.org/datawire/reloop)
 
 Reloop allows you to get a fast development cycle when working on containerized applications: just edit your code and your changes go live.
 
