@@ -36,11 +36,11 @@ services:
       - ".:/code:ro"
     environment:
       # The file or directory to watch for updates:
-      WATCH: "/code/hello.py"
+      RELOOP_WATCH: "/code/hello.py"
       # Run once as setup:
-      BEFORE_CMD: "pip install -r /code/requirements.txt"
+      RELOOP_BEFORE_CMD: "pip install -r /code/requirements.txt"
       # Run every time the watched files change:
-      CMD: "python /code/hello.py"
+      RELOOP_CMD: "python /code/hello.py"
   mydatabase:
     # The postgres dependency for hello.py:
     image: "postgres"

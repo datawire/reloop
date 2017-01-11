@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import click
 import os
+# Pacify Click:
+if os.environ.get("LANG", None) is None:
+    os.environ["LANG"] = os.environ["LC_ALL"] = "C.UTF-8"
+import click
 import shlex
 import subprocess
 
@@ -59,7 +63,7 @@ def run():
         subprocess.call(cmd)
 
     if not command:
-        click.echo('==> reloopd, ERROR : environment variable RELOOP_CMD is not set! Exiting.')
+        click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
     global proc
