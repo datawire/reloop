@@ -9,6 +9,9 @@ Theory of operation:
 
 The effect is that you hit save and your change is almost immediately reflected.
 
+## Known Limitations
+
+This currently only works on Linux hosts; OS X is planned.
 
 ## Quickstart: Python
 
