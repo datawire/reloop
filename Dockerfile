@@ -32,4 +32,4 @@ RUN apt-get update && \
 COPY dist/reloopd /bin
 
 RUN chmod +x /bin/reloopd
-ENTRYPOINT ["bin/reloopd run"]
+ENTRYPOINT ["/bin/reloopd", "run"]
