@@ -45,12 +45,14 @@ def run():
         click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
-    click.echo('reloopd run {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
+    click.echo('reloopd run {0} {1}'.format(('directory' if os.path.isdir(watch) else 'file'),
                                              os.path.abspath(watch)))
     notifier = inotify.INotify()
     notifier.startReading()
     # recursive=True causes this whole thing to barely work... no FS changes will be detected.
     notifier.watch(filepath.FilePath(str(s.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
+    # Start it up the first time:
+    on_change(None, None, None)
     reactor.run()
 
 if __name__ == '__main__':
