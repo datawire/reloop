@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import click
 import os
-import click
 import subprocess
+import time
+import shlex
 
 from twisted.internet import inotify, reactor
 from twisted.python import filepath
@@ -38,11 +39,12 @@ def on_change(ignored, path, mask):
         if proc is not None and proc.poll() is None:
             click.echo('==> reloopd, INFO  : terminating previous process')
             proc.kill()
+            proc.wait()
 
         if before_command:
-            subprocess.call(before_command, shell=True)
+            subprocess.call(shlex.split(before_command))
 
-        proc = subprocess.Popen(command, shell=True)
+        proc = subprocess.Popen(shlex.split(command))
 
 
 @click.group(name='reloopd')
@@ -58,14 +60,14 @@ def run():
 
     if before_command:
         click.echo('==> reloopd, INFO  : running RELOOP_BEFORE_CMD')
-        subprocess.call(before_command, shell=True)
+        subprocess.call(shlex.split(before_command))
 
     if not command:
         click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
     global proc
-    proc = subprocess.Popen(command, shell=True)
+    proc = subprocess.Popen(shlex.split(command))
 
     click.echo('==> reloopd, INFO  : watching {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
                                                                os.path.abspath(watch)))
@@ -73,7 +75,7 @@ def run():
     notifier = inotify.INotify()
     notifier.startReading()
     # recursive=True causes this whole thing to barely work... no FS changes will be detected.
-    notifier.watch(filepath.FilePath(str(os.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
+    notifier.watch(filepath.FilePath(str(os.path.abspath(watch))), autoAdd=True, callbacks=[on_change], recursive=True)
     reactor.run()
 
 if __name__ == '__main__':
