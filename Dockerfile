@@ -27,10 +27,9 @@ LABEL PROJECT_REPO_URL         = "git@github.com:datawire/reloop.git" \
 #
 
 RUN apt-get update && \
-    apt-get -y install \
-        python3 && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY dist/reloopd /bin
 
-ENTRYPOINT ["reloopd run"]
+RUN chmod +x /bin/reloopd
+ENTRYPOINT ["bin/reloopd run"]

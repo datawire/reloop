@@ -13,7 +13,7 @@ build:
 	dist/reloopd --help
 
 docker-build: all
-	docker build -t $(DOCKER_REPO):$(VERSION) .
+	docker build -t $(DOCKER_REPO):$(VERSION) -t $(DOCKER_REPO):latest .
 
 docker-sh:
 	docker run -it --entrypoint /bin/sh $(DOCKER_REPO):$(VERSION)

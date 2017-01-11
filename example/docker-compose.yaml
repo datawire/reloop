@@ -1,4 +1,4 @@
-version: "1"
+version: "2"
 services:
   web:
     # Use the special reloop image:
@@ -6,15 +6,15 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      # Mount the repository as /code, read-only
-      - ".:/code:ro"
+      # Mount the repository as /hello, read-only
+      - ".:/hello:ro"
     environment:
       # The file or directory to watch for updates:
-      WATCH: "/code/hello.py"
+      RELOOP_WATCH: "/hello"
       # Run once as setup:
-      BEFORE_CMD: "pip install -r /code/requirements.txt"
+      RELOOP_BEFORE_CMD: "pip install -r /hello/requirements.txt"
       # Run every time the watched files change:
-      CMD: "python /code/hello.py"
+      RELOO_CMD: "python /hello/hello.py"
   mydatabase:
     # The postgres dependency for hello.py:
     image: "postgres"

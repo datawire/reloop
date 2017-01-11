@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 import click
 import os
+import shlex
+import subprocess
 
 from twisted.internet import inotify, reactor
 from twisted.python import filepath
 from . import __version__
 
 watch = os.getenv('RELOOP_WATCH', '.')
-before_command = os.getenv('RELOOP_BEFORE_CMD', '[ ]')
+before_command = os.getenv('RELOOP_BEFORE_CMD', None)
 command = os.getenv('RELOOP_CMD')
+debug = os.getenv('RELOOP_DEBUG', '0').lower() in {'1', 'true'}
+
+proc = None
 
 
 def on_change(ignored, path, mask):
@@ -17,14 +22,23 @@ def on_change(ignored, path, mask):
     @param path: FilePath on which the event happened.
     @param mask: inotify event as hexadecimal masks
     """
-    import subprocess
-    import shlex
 
-    click.echo('inotify event (events: [{}], path: {})'.format(', '.join(inotify.humanReadableMask(mask)), path))
-    if before_command:
-        subprocess.call(shlex.split(before_command), shell=True)
+    global proc
+    events = set(inotify.humanReadableMask(mask))
+    print(events)
+    if debug:
+        click.echo('==> reloopd, DEBUG : inotify event(s) - [{}], path: {}'.format(', '.join(inotify.humanReadableMask(mask)), path))
 
-    subprocess.call(shlex.split(command), shell=True)
+    if ('create' or 'delete' or 'modify') in events:
+
+        if proc is not None and proc.poll() is None:
+            click.echo('==> reloopd, INFO  : terminating previous process')
+            proc.kill()
+
+        if before_command:
+            subprocess.call(shlex.split(before_command), shell=True)
+
+        proc = subprocess.Popen(shlex.split(command))
 
 
 @click.group(name='reloopd')
@@ -38,16 +52,26 @@ def run():
     if not watch:
         exit(1)
 
+    if before_command:
+        click.echo('==> reloopd, INFO  : running RELOOP_BEFORE_CMD')
+        cmd = shlex.split(before_command)
+        print(cmd)
+        subprocess.call(cmd)
+
     if not command:
-        click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
+        click.echo('==> reloopd, ERROR : environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
-    click.echo('reloopd run {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
-                                             os.path.abspath(watch)))
+    global proc
+    proc = subprocess.Popen(shlex.split(command))
+
+    click.echo('==> reloopd, INFO  : watching {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
+                                                               os.path.abspath(watch)))
+
     notifier = inotify.INotify()
     notifier.startReading()
     # recursive=True causes this whole thing to barely work... no FS changes will be detected.
-    notifier.watch(filepath.FilePath(str(s.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
+    notifier.watch(filepath.FilePath(str(os.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
     reactor.run()
 
 if __name__ == '__main__':

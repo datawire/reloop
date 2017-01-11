@@ -12,9 +12,13 @@ The effect is that you hit save and your change is almost immediately reflected.
 
 ## Quickstart: Python
 
+Before we begin, move into the `example` directory.
+
+`$ cd example/`
+
 Let's imagine you just have the following structure in your repository:
 
-* `hello.py` (a Flask application that listens on port 5000 and uses PostgreSQL)
+* `hello/hello.py` (a Flask application that listens on port 5000 and uses PostgreSQL)
 * `requirements.txt` (the dependencies your app needs)
 
 To use Reloop you could create the following Docker Compose file:
