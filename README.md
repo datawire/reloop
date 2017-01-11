@@ -37,7 +37,7 @@ services:
       BEFORE_CMD: "pip install -r /code/requirements.txt"
       # Run every time the watched files change:
       CMD: "python /code/hello.py"
-  postgres:
+  mydatabase:
     # The postgres dependency for hello.py:
     image: "postgres"
 ```

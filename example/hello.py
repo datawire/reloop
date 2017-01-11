@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 
-import time
-import os
-
 import pg8000
-from flask import Flask, jsonify
+from flask import Flask
 
 app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def hello(name):
+    setup()
+    conn = get_db("counter")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM counter FOR UPDATE")
+    [counter] = cursor.fetchone()
+    cursor.execute("UPDATE counter SET hits = hits + 1")
+    conn.commit()
+    return "Hello! You are hit #{}.".format(name, counter + 1)
 
 
 def setup():
@@ -34,19 +42,7 @@ def setup():
 def get_db(database):
     return pg8000.connect(user="postgres", password="postgres",
                           database=database,
-                          host=os.environ["MYDATABASE_SERVICE_HOST"])
-
-
-@app.route('/', methods=['GET'])
-def hello(name):
-    setup()
-    conn = get_db("counter")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM counter FOR UPDATE")
-    [counter] = cursor.fetchone()
-    cursor.execute("UPDATE counter SET hits = hits + 1")
-    conn.commit()
-    return "Hello! You are hit #{}.".format(name, counter + 1)
+                          host="mydatabase")
 
 
 def main():
