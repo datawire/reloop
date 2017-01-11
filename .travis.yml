@@ -7,7 +7,7 @@ services:
 
 env:
   global:
-  - DOCKER_REPO=datawire/reloopd
+  - DOCKER_REPO=datawire/reloopdDND
   - COMMIT=${TRAVIS_COMMIT::8}
 
 install:
