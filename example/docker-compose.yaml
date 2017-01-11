@@ -1,0 +1,20 @@
+version: "2"
+services:
+  web:
+    # Use the special reloop image:
+    image: "datawire/reloop"
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount the repository as /code, read-only
+      - ".:/code:ro"
+    environment:
+      # The file or directory to watch for updates:
+      WATCH: "/code/hello.py"
+      # Run once as setup:
+      BEFORE_CMD: "pip install -r /code/requirements.txt"
+      # Run every time the watched files change:
+      CMD: "python /code/hello.py"
+  postgres:
+    # The postgres dependency for hello.py:
+    image: "postgres"
