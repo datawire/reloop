@@ -12,7 +12,7 @@ build:
 	# Make sure resulting pex file works:
 	dist/reloopd --help
 
-docker-build: all
+docker-build: build
 	docker build -t $(DOCKER_REPO):$(VERSION) .
 
 docker-sh:
