@@ -1,5 +1,6 @@
 # Makefile: hello
 
+DOCKER_REPO=datawire/reloopd
 VERSION=$(shell git rev-parse --short=8 HEAD)
 
 .PHONY: all
@@ -9,9 +10,14 @@ all: clean build
 build:
 	tox -e py34
 
+docker-build:
+	docker build -t $(DOCKER_REPO):$(VERSION) .
+
+docker-sh:
+	docker run -it --entrypoint /bin/sh $(DOCKER_REPO):$(VERSION)
+
 clean:
-	# Clean previous build outputs (e.g. class files) and temporary files. Customize as needed.
-	:
+	rm -rf .tox .cache dist *.egg-info
 
 # Python virtualenv automatic setup. Ensures that targets relying on the virtualenv always have an updated python to
 # use.

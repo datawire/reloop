@@ -23,9 +23,9 @@ def on_change(ignored, path, mask):
 
     click.echo('inotify event (events: [{}], path: {})'.format(', '.join(inotify.humanReadableMask(mask)), path))
     if before_command:
-        subprocess.call(before_command, shell=True)
+        subprocess.call(shlex.split(before_command), shell=True)
 
-    subprocess.call(command)
+    subprocess.call(shlex.split(command), shell=True)
 
 
 @click.group(name='reloopd')
@@ -36,6 +36,9 @@ def reloopd():
 
 @reloopd.command()
 def run():
+    if not watch:
+        exit(1)
+
     if not command:
         click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
@@ -44,7 +47,8 @@ def run():
                                              watch.absolute()))
     notifier = inotify.INotify()
     notifier.startReading()
-    notifier.watch(filepath.FilePath(str(watch.absolute())), watch.is_dir(), autoAdd=True, callbacks=[on_change])
+    # recursive=True causes this whole thing to barely work... no FS changes will be detected.
+    notifier.watch(filepath.FilePath(str(watch.absolute())), autoAdd=True, callbacks=[on_change])
     reactor.run()
 
 if __name__ == '__main__':

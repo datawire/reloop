@@ -1,4 +1,4 @@
-version: "2"
+version: "1"
 services:
   web:
     # Use the special reloop image:
