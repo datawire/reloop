@@ -11,6 +11,7 @@ env:
   - COMMIT=${TRAVIS_COMMIT::8}
 
 install:
+- pip install tox-travis
 - make ci-setup
 - pip3 install -r ci-tools/requirements.txt
 
