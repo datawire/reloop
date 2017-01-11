@@ -37,7 +37,7 @@ def get_db(database):
                           host=os.environ["MYDATABASE_SERVICE_HOST"])
 
 
-@app.route('/hello/<name>', methods=['GET'])
+@app.route('/', methods=['GET'])
 def hello(name):
     setup()
     conn = get_db("counter")
@@ -46,20 +46,7 @@ def hello(name):
     [counter] = cursor.fetchone()
     cursor.execute("UPDATE counter SET hits = hits + 1")
     conn.commit()
-    return jsonify(
-        message="Hello, {}! You are hit #{}.".format(name, counter + 1),
-        time=int(round(time.time() * 1000)))
-
-
-@app.route('/health', methods=['GET', 'HEAD'])
-def health():
-    # TODO: Custom health check logic.
-    return '', 200
-
-
-@app.route('/')
-def root():
-    return '', 200
+    return "Hello! You are hit #{}.".format(name, counter + 1)
 
 
 def main():
