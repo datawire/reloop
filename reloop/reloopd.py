@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 import click
 import os
-# Pacify Click:
-if os.environ.get("LANG", None) is None:
-    os.environ["LANG"] = os.environ["LC_ALL"] = "C.UTF-8"
 import click
 import shlex
 import subprocess
@@ -11,6 +8,10 @@ import subprocess
 from twisted.internet import inotify, reactor
 from twisted.python import filepath
 from . import __version__
+
+# Pacify Click:
+if os.environ.get("LANG", None) is None:
+    os.environ["LANG"] = os.environ["LC_ALL"] = "C.UTF-8"
 
 watch = os.getenv('RELOOP_WATCH', '.')
 before_command = os.getenv('RELOOP_BEFORE_CMD', None)
