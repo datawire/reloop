@@ -31,4 +31,4 @@ RUN apt-get update && \
 
 COPY dist/reloopd /bin
 
-ENTRYPOINT ["reloopd run"]
+ENTRYPOINT ["reloopd", "run"]
