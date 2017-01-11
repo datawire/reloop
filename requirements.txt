@@ -1,3 +1,4 @@
-click
-pyyaml
-Twisted
+click==6.7
+pyyaml==3.12
+Twisted==16.6
+zope.interface==4.3.3
