@@ -7,14 +7,14 @@ services:
       - "5000:5000"
     volumes:
       # Mount the repository as /hello, read-only
-      - ".:/hello:ro"
+      - ".:/code:ro"
     environment:
       # The file or directory to watch for updates:
-      RELOOP_WATCH: "/hello"
+      RELOOP_WATCH: "/code"
       # Run once as setup:
-      RELOOP_BEFORE_CMD: "pip install -r /hello/requirements.txt"
+      RELOOP_BEFORE_CMD: "pip install -r /code/requirements.txt"
       # Run every time the watched files change:
-      RELOO_CMD: "python /hello/hello.py"
+      RELOOP_CMD: "python /code/hello/hello.py"
   mydatabase:
     # The postgres dependency for hello.py:
     image: "postgres"
