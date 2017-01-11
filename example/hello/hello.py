@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
-def hello(name):
+def hello():
     setup()
     conn = get_db("counter")
     cursor = conn.cursor()
@@ -15,7 +15,7 @@ def hello(name):
     [counter] = cursor.fetchone()
     cursor.execute("UPDATE counter SET hits = hits + 1")
     conn.commit()
-    return "Hello! You are hit #{}.".format(name, counter + 1)
+    return "Hello! You are hit #{}.".format(counter + 1)
 
 
 def setup():
@@ -47,7 +47,7 @@ def get_db(database):
 
 
 def main():
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
 
 
 if __name__ == '__main__':
