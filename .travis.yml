@@ -1,0 +1,20 @@
+---
+sudo: false
+dist: trusty
+lang: python
+services:
+  - docker
+
+env:
+  global:
+  - DOCKER_REPO=datawire/reloopd
+  - COMMIT=${TRAVIS_COMMIT::8}
+
+install:
+- make ci-setup
+- pip3 install -r ci-tools/requirements.txt
+
+script:
+- docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+- make build
+- python3 ci-tools/cloud/docker_build.py

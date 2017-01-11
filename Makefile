@@ -12,6 +12,9 @@ build:
 	# Make sure resulting pex file works:
 	dist/reloopd --help
 
+ci-setup:
+	( ! test -z $$GITHUB_TOKEN && sh -c "git clone https://d6-automaton:$$GITHUB_TOKEN@github.com/datawire/ci-tools.git") || git clone git@github.com:datawire/ci-tools.git
+
 docker-build: all
 	docker build -t $(DOCKER_REPO):$(VERSION) -t $(DOCKER_REPO):latest .
 
