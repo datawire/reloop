@@ -24,7 +24,7 @@ version: "2"
 services:
   web:
     # Use the special reloop image:
-    image: "datawire/reloop"
+      image: "datawire/reloopd"
     ports:
       - "5000:5000"
     volumes:
