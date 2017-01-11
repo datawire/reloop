@@ -1,3 +1,5 @@
 click
 boto3
 pyyaml
+pyinotify
+Twisted

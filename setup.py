@@ -9,7 +9,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     entry_points={
         'console_scripts': [
-            'reloop=reloop.cli:cli'
+            'reloopd=reloop.reloopd:reloopd'
         ],
     },
     version=versioneer.get_version(),
