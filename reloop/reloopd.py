@@ -51,7 +51,7 @@ def run():
     # recursive=True causes this whole thing to barely work... no FS changes will be detected.
     notifier.watch(filepath.FilePath(str(os.path.abspath(watch))), autoAdd=True, callbacks=[on_change])
     # Start it up the first time:
-    on_change(None, None, None)
+    on_change(None, None, 0)
     reactor.run()
 
 if __name__ == '__main__':
