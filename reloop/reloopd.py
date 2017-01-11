@@ -21,13 +21,12 @@ def on_change(ignored, path, mask):
     @param mask: inotify event as hexadecimal masks
     """
     import subprocess
-    import shlex
 
     click.echo('inotify event (events: [{}], path: {})'.format(', '.join(inotify.humanReadableMask(mask)), path))
     if before_command:
-        subprocess.call(shlex.split(before_command), shell=True)
+        subprocess.call(before_command, shell=True)
 
-    subprocess.call(shlex.split(command), shell=True)
+    subprocess.call(command, shell=True)
 
 
 @click.group(name='reloopd')
