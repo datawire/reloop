@@ -41,6 +41,8 @@ services:
       RELOOP_BEFORE_CMD: "pip install -r /code/requirements.txt"
       # Run every time the watched files change:
       RELOOP_CMD: "python /code/hello.py"
+    depends_on:
+      - mydatabase
   mydatabase:
     # The postgres dependency for hello.py:
     image: "postgres"
