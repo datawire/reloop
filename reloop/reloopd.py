@@ -5,7 +5,6 @@ import os
 if os.environ.get("LANG", None) is None:
     os.environ["LANG"] = os.environ["LC_ALL"] = "C.UTF-8"
 import click
-import shlex
 import subprocess
 
 from twisted.internet import inotify, reactor
@@ -40,9 +39,9 @@ def on_change(ignored, path, mask):
             proc.kill()
 
         if before_command:
-            subprocess.call(shlex.split(before_command), shell=True)
+            subprocess.call(before_command, shell=True)
 
-        proc = subprocess.Popen(shlex.split(command))
+        proc = subprocess.Popen(command, shell=True)
 
 
 @click.group(name='reloopd')
@@ -58,16 +57,14 @@ def run():
 
     if before_command:
         click.echo('==> reloopd, INFO  : running RELOOP_BEFORE_CMD')
-        cmd = shlex.split(before_command)
-        print(cmd)
-        subprocess.call(cmd)
+        subprocess.call(before_command, shell=True)
 
     if not command:
         click.echo('ERROR: environment variable RELOOP_CMD is not set! Exiting.')
         exit(1)
 
     global proc
-    proc = subprocess.Popen(shlex.split(command))
+    proc = subprocess.Popen(command, shell=True)
 
     click.echo('==> reloopd, INFO  : watching {0} {1})'.format(('directory' if os.path.isdir(watch) else 'file'),
                                                                os.path.abspath(watch)))
