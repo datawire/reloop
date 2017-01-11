@@ -13,6 +13,8 @@ The effect is that you hit save and your change is almost immediately reflected.
 
 This currently only works on Linux hosts; OS X is planned.
 
+Docker Hub is laggy (or operator error is causing issues) so the necessary image may not be available yet.
+
 ## Quickstart: Python
 
 Before we begin, move into the `example` directory.
