@@ -9,6 +9,8 @@ all: clean build
 
 build:
 	tox -e py34
+	# Make sure resulting pex file works:
+	dist/reloopd --help
 
 docker-build: all
 	docker build -t $(DOCKER_REPO):$(VERSION) .
