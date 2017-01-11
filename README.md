@@ -23,6 +23,7 @@ To use Reloop you could create the following Docker Compose file:
 version: "2"
 services:
   web:
+    # Use the special reloop image:
     image: "datawire/reloop"
     ports:
       - "5000:5000"
@@ -37,7 +38,7 @@ services:
       # Run every time the watched files change:
       CMD: "python /code/hello.py"
   postgres:
-    # The postgres dependency for Flask:
+    # The postgres dependency for hello.py:
     image: "postgres"
 ```
 
